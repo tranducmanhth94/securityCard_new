@@ -1,0 +1,11 @@
+C:\Users\trand\source\repos\fixFelica\fixFelica\bin\Debug\fixFelica.exe.config
+C:\Users\trand\source\repos\fixFelica\fixFelica\bin\Debug\fixFelica.exe
+C:\Users\trand\source\repos\fixFelica\fixFelica\bin\Debug\fixFelica.pdb
+C:\Users\trand\source\repos\fixFelica\fixFelica\obj\Debug\fixFelica.csproj.AssemblyReference.cache
+C:\Users\trand\source\repos\fixFelica\fixFelica\obj\Debug\fixFelica.csproj.SuggestedBindingRedirects.cache
+C:\Users\trand\source\repos\fixFelica\fixFelica\obj\Debug\fixFelica.Form1.resources
+C:\Users\trand\source\repos\fixFelica\fixFelica\obj\Debug\fixFelica.Properties.Resources.resources
+C:\Users\trand\source\repos\fixFelica\fixFelica\obj\Debug\fixFelica.csproj.GenerateResource.cache
+C:\Users\trand\source\repos\fixFelica\fixFelica\obj\Debug\fixFelica.csproj.CoreCompileInputs.cache
+C:\Users\trand\source\repos\fixFelica\fixFelica\obj\Debug\fixFelica.exe
+C:\Users\trand\source\repos\fixFelica\fixFelica\obj\Debug\fixFelica.pdb
