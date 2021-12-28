@@ -35,6 +35,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
+using System.Timers;
+using System.Threading;
+using System.Windows.Forms;
 
 
 namespace FelicaLib
@@ -87,8 +90,24 @@ namespace FelicaLib
         [DllImport("felicalib.dll", CallingConvention = CallingConvention.Cdecl)]
         private extern static int felica_write_without_encryption(IntPtr f, int servicecode, byte addr, byte data);
 
-        private IntPtr pasorip = IntPtr.Zero;
-        private IntPtr felicap = IntPtr.Zero;
+        public static IntPtr pasorip = IntPtr.Zero;
+        public static IntPtr felicap = IntPtr.Zero;
+
+/*        void testC()
+        {
+            public Felica()
+            {
+                pasorip = pasori_open(null);
+                if (pasorip == IntPtr.Zero)
+                {
+                    throw new Exception("felicalib.dll を開けません");
+                }
+                if (pasori_init(pasorip) != 0)
+                {
+                    throw new Exception("PaSoRi に接続できません");
+                }
+            }
+        }*/
 
         public Felica()
         {
@@ -97,11 +116,12 @@ namespace FelicaLib
             {
                 throw new Exception("felicalib.dll を開けません");
             }
-            if (pasori_init(pasorip) != 0)
+            else if (pasori_init(pasorip) != 0)
             {
                 throw new Exception("PaSoRi に接続できません");
             }
         }
+
 
         public void Dispose()
         {
@@ -110,6 +130,7 @@ namespace FelicaLib
                 pasori_close(pasorip);
                 pasorip = IntPtr.Zero;
             }
+            
         }
 
         ~Felica()
@@ -117,18 +138,48 @@ namespace FelicaLib
             Dispose();
         }
 
-        public void Polling(int systemcode)
+        public bool valueCheck = false;
+
+     /*   public static IntPtr testC()
         {
+            pasorip = pasori_open(null);
+            IntPtr felicap1 = IntPtr.Zero;
+
+            Thread.Sleep(1000);
+            felica_free(felicap1);
+
+            felicap1 = felica_polling(pasorip, (ushort)65535, 0, 0);
+
+            return felicap1;
+
+        }*/
+
+        public IntPtr Polling(int systemcode)
+        {
+            Thread.Sleep(500);
             felica_free(felicap);
 
             felicap = felica_polling(pasorip, (ushort)systemcode, 0, 0);
-            if (felicap == IntPtr.Zero)
+
+            return felicap;
+
+            if (felicap != IntPtr.Zero)
             {
                 //0x07e73048
-                throw new Exception("カード読み取り失敗");
-            }
+                //throw new Exception("カード読み取り失敗");
+                // 2 cach xu li, ra hoi lien tuc 
 
+            }
         }
+        
+      /*  public void testConnect()
+        {
+            if(valueCheck == true)
+            {
+                
+            }
+        }*/
+
 
         public byte[] IDm()
         {
@@ -136,10 +187,14 @@ namespace FelicaLib
             {
                 throw new Exception("no polling executed.");
             }
-
+            string IDM = "";
             byte[] buf = new byte[8];
             felica_getidm(felicap, buf);
+
+            IDM = buf.ToString();
             return buf;
+            // 012E4CE36184383A id
+            // 146762279713256  byte
         }
 
         public byte[] PMm()
@@ -154,39 +209,36 @@ namespace FelicaLib
             return buf;
         }
 
+
         public byte[] ReadWithoutEncryption(int servicecode, int addr)
         {
+            
             if (felicap == IntPtr.Zero)
             {
-                throw new Exception("no polling executed.");    
+                //throw new Exception("no polling executed.");    
             }
 
-            byte[] data = new byte[16];
-            int ret = felica_read_without_encryption02(felicap, servicecode, 0, (byte)addr, data);
-            if (ret != 0)
+             byte[] data = new byte[16];
+
+            try
             {
-                return null;
+
+                int ret = felica_read_without_encryption02(felicap, servicecode, 0, (byte)addr, data);
+
+
+                if (ret != 0)
+                {
+                    return null;
+                }
+              
             }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+            
             return data;
         }
-
-        //書き込み追加
-        /*        public byte WriteWithoutEncryption(int servicecode, int addr, string str)
-                {
-                    if (felicap == IntPtr.Zero)
-                    {
-                        throw new Exception("no polling executed.");
-                    }
-                    byte data = new byte[16];
-                    data = System.Text.Encoding.UTF8.GetBytes(str);
-                    int ret = felica_write_without_encryption(felicap, servicecode, (byte)addr, data);
-                    if (ret != 0)
-                    {
-                        throw new Exception("カード書き込み失敗");
-                    }
-
-                    return data;
-                }*/
 
     }
 }

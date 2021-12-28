@@ -16,7 +16,8 @@ namespace fixFelica
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            //Application.Run(new startFrom());
+            Application.Run(new confirmFrom());
         }
     }
 }
